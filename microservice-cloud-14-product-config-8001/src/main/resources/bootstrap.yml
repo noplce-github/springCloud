@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    config:
+      name: microservice-config-product #github上的配置名称，注意没有yml后缀名
+      profile: prod   # 本次访问的环境配置项
+      label: master   # 远程库的分支名
+      uri: http://localhost:5001 #Config配置中心地址，通过它获取microservice-config-product.yml配置信息
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+#  暴露触发消息总线的地址
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh

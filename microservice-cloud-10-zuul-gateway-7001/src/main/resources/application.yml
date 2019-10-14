@@ -1,0 +1,32 @@
+server:
+  port: 7001
+
+spring:
+  application:
+    name: microservice-zuul-gateway
+
+eureka:
+  client:
+    registerWithEureka: true # 服务注册开关
+    fetchRegistry: true # 服务发现开关
+    serviceUrl: # 客户端(服务提供者)注册到哪一个Eureka Server服务注册中心，多个用逗号分隔
+      # 单机版 Eureka 服务注册中心
+      #defaultZone: http://localhost:6001/eureka
+      # 集群版 Eureka 服务注册中心
+      defaultZone: http://eureka6001.com:6001/eureka,http://eureka6002.com:6002/eureka
+  instance:
+    instanceId: ${spring.application.name}:${server.port} # 指定实例ID,就不会显示主机名了
+    preferIpAddress: true     #访问路径可以显示IP地址
+
+zuul:
+  routes:
+    provider-product:    # 路由名称，名称任意，路由名称唯一
+      path: /product/** # 访问路径
+      serviceId: microservice-product # 指定服务ID，会自动从Eureka中找到此服务的ip和端口
+      stripPrefix: false # 代理转发时去掉前缀，false:代理转发时不去掉前缀 例如:为true时请求 /product/get/1，代理转发到/get/1
+
+    # 如果多个服务需要经过路由，则同povider-product方式继续添加，例如：
+    #provider-order:
+      #path: /order/**
+      #serviceId: microservice-order
+      #stripPrefix: false
